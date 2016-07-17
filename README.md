@@ -30,8 +30,11 @@ Note: It is important that the pcap file used contains http data, otherwise the 
    
 9. Use the following commands for compilation and running the connector
    `cd Modsecurity-Snort`
+   
    `export LD_LIBRARY_PATH=/usr/local/modsecurity/lib`
+   
    `sudo gcc modsecurity-snort.c  -I /opt/ModSecurity/headers -L /opt/ModSecurity/src/.libs/ -lmodsecurity -o modsecurity-snort`
+   
    `./modsecurity-snort`   
 	
 
