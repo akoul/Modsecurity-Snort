@@ -28,7 +28,8 @@ Note: It is important that the pcap file used contains http data, otherwise the 
    `cd /opt`
    `git clone https://github.com/akoul/Modsecurity-Snort`
    
-9. Use the following commands for compilation and running the connector
+9. Use the following commands for compilation and running the connector:
+   
    `cd Modsecurity-Snort`
    
    `export LD_LIBRARY_PATH=/usr/local/modsecurity/lib`
