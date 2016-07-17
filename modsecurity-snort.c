@@ -1,13 +1,23 @@
 #include <modsecurity/transaction.h>
-#include "modsecurity/modsecurity.h"
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <modsecurity/modsecurity.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+
+char main_rule_uri[] = "basic_rules.conf";
 
 int main(){
-
-	//File reading declarations
-	FILE *fp = fopen("data.log", "r");
+	
+    //Get Home directory path
+    struct passwd *pw = getpwuid(getuid());
+    char *homedir = pw->pw_dir;		
+    strcat(homedir,"/data.log");
+    
+    //File reading declarations
+    FILE *fp = fopen(homedir, "r");
     const char s[2] = ", ";
     char *token;
     int i;
@@ -46,13 +56,13 @@ int main(){
     }
     msc_rules_dump(rules);
 
-    //Read from file and call process() function for every packet after rading data from file.
+    //Read from file and call process() function for every packet data extracted from file.
     if(fp != NULL)
     {
         char line[80];
         while(fgets(line, sizeof line, fp) != NULL)
         {
-        	transaction = msc_new_transaction(modsec, rules, NULL);
+            transaction = msc_new_transaction(modsec, rules, NULL);
             token = strtok(line, s);
             for(int i=0; i<5; i++)
             {
@@ -65,20 +75,13 @@ int main(){
             	else if (i == 3)
             		desIP = token;
             	else if (i == 4)
-            		desPort = atoi(token);
-            	//Test printing the values
-            	/*if(i==4)
-            	{
-            	printf("%s\n",token);
-            	token = strtok(NULL,s);
-            	}
-            	else{
-            	printf("%s\t",token);
-            	token = strtok(NULL,s);	
-            	}*/
+            		desPort = atoi(token);	
             }
             msc_process_connection(transaction, srcIP, srcPort, desIP, desPort);
         }
+        
+        //Clean Up
+        end:
         fclose(fp);
         msc_rules_cleanup(rules);
     	msc_cleanup(modsec);
@@ -87,4 +90,3 @@ int main(){
     }   
 	return 0;
 }
-
