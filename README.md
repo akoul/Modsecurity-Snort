@@ -19,6 +19,7 @@ This repo contains the Modsecurity-snort connector which will be used to process
 (https://github.com/akoul/Modsecurity-Snort/blob/master/http.cap)
 
 6. Run the following command in your terminal:
+
    `snort -c $my_path/etc/snort/snort.lua --plugin-path $my_path/lib/snort_extra -A alert_ex -r /path/to/my.pcap`
 
 7. A data.log file must be created in your home directory. The file contains extracted data from the http trace file you used as input to the snort system. 
